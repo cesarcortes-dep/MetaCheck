@@ -32,8 +32,9 @@ yarn-error.log*
 .env*
 !.env.example
 
-# internal docs (local only, not published)
+# internal docs + personal notes (local only, not published)
 /docs
+/.claude
 
 # vercel
 .vercel

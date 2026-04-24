@@ -67,13 +67,17 @@ export const ANALYZE_ERROR_CODES = [
   'TIMEOUT',
   'NOT_HTML',
   'TOO_LARGE',
+  'RATE_LIMITED',
 ] as const;
 
 export type AnalyzeErrorCode = (typeof ANALYZE_ERROR_CODES)[number];
 
+export interface AnalyzeErrorBody {
+  code: AnalyzeErrorCode;
+  message: string;
+  retryAfter?: number;
+}
+
 export interface AnalyzeErrorResponse {
-  error: {
-    code: AnalyzeErrorCode;
-    message: string;
-  };
+  error: AnalyzeErrorBody;
 }

@@ -1,15 +1,15 @@
 @AGENTS.md
-# MetaCheck — Project Context & Continuity
+# MetaCheck — Project Context
 
-You are helping me build MetaCheck, a Next.js 14 web application that analyzes any URL's meta tags and shows how the site will appear on Google, Facebook, Twitter/X, and LinkedIn. Before generating any code, internalize the full context below.
+You are helping build MetaCheck, a Next.js 14+ web application that analyzes any URL's meta tags and shows how the site will appear on Google, Facebook, Twitter/X, and LinkedIn. Before generating any code, internalize the full context below.
+
+> Local-only personal notes (work cadence, nightly plan, current status) live in `.claude/notes.md` — gitignored. Read that at session start to know where we are in the build.
 
 ## Project Overview
 
 **Name:** MetaCheck
 **Purpose:** Analyze meta tags, Open Graph, Twitter Cards, and schema.org for any public URL. Generate visual previews of how the site will appear on Google SERP, Facebook, Twitter/X, and LinkedIn. Output a technical report with a score and a downloadable PDF.
 **Target users:** Local business owners, junior marketers, freelancers, small agencies.
-**Business goal:** Serve as a lead magnet and portfolio piece for my marketing agency. MUST be demoable in 30 seconds, must work without login, must lead to a CTA toward my agency.
-**Time budget:** 5-10 hours per week. Aim for MVP in 2 weeks (10 nights of work).
 
 ## MVP Scope (what we ARE building)
 
@@ -19,7 +19,7 @@ You are helping me build MetaCheck, a Next.js 14 web application that analyzes a
 - Technical report with score (0-100) and checklist (SEO / Open Graph / Twitter / Structured Data)
 - Downloadable PDF with the analysis
 - Rate limiting via Upstash Redis
-- Basic landing page with CTA to the agency
+- Landing page with CTA
 
 ## Out of Scope (do NOT build these)
 
@@ -44,6 +44,7 @@ You are helping me build MetaCheck, a Next.js 14 web application that analyzes a
 - **Icons:** lucide-react
 - **PDF:** @react-pdf/renderer (not Puppeteer)
 - **Rate limiting:** Upstash Redis (@upstash/redis, @upstash/ratelimit)
+- **Theme:** next-themes (light/dark, class-based)
 - **Package manager:** pnpm
 - **Node:** 20+
 - **Deployment:** Vercel (auto-deploy on push to main)
@@ -74,7 +75,7 @@ public/           # Static assets
 - Always use `forwardRef` where refs make sense
 - Always accept `className` and merge via `cn()`
 - Always set `displayName`
-- Named exports ONLY — no default exports
+- Named exports ONLY — no default exports (except Next's required `page.tsx`, `layout.tsx`, `route.ts`, `error.tsx`, `not-found.tsx`, `opengraph-image.tsx`, `robots.ts`, `sitemap.ts`)
 - Use cva for variants — no inline ternaries for styling
 - Use Radix primitives for anything that needs accessibility (dialogs, tabs, selects, etc.)
 
@@ -102,38 +103,21 @@ public/           # Static assets
 - Commit convention: Conventional Commits (`feat:`, `fix:`, `chore:`, `docs:`, `refactor:`)
 - Push frequently — Vercel auto-deploys preview URLs from feature branches
 
-## Current Status
+## Internal documentation
 
-I will tell you which night we are on at the start of each session. The full 10-night plan is:
-
-- **Night 1:** Project scaffolding (Next.js + Tailwind + folder structure + deploy) — DONE
-- **Night 2:** UI base components (Button, Input, Card, Badge, Spinner, Tabs) with design tokens
-- **Night 3:** Scraping and parsing API (`/api/analyze` with cheerio, returns structured JSON)
-- **Night 4:** URL input form UI + dispatch to API + loading states + Context for results
-- **Night 5:** Google SERP preview + Facebook preview components
-- **Night 6:** Twitter preview + LinkedIn preview + Tabs navigation
-- **Night 7:** Technical report with score calculation and checklist
-- **Night 8:** PDF generation with @react-pdf/renderer
-- **Night 9:** Rate limiting (Upstash) + error handling + app-level SEO/metadata
-- **Night 10:** Landing page + README + launch prep
-
-At the start of each session I'll tell you the current night and any relevant state. Assume everything from previous nights is already implemented and working unless I say otherwise.
+There's a `docs/` folder (gitignored) with a living technical doc — one file per feature slice plus `architecture.md` as the index. After completing or materially changing a feature, update the relevant doc in the same session. See `docs/architecture.md` for the current map.
 
 ## How to Help Me
 
-1. **Ask clarifying questions before generating code** if the task is ambiguous
-2. **Follow every convention above without deviation** — if you think a convention should be broken, ASK first
-3. **Generate complete, working code** — no placeholders like `// TODO: implement later` unless I explicitly ask
-4. **Explain trade-offs** when you make non-obvious technical decisions
-5. **Propose verification steps** at the end of each task (lint, typecheck, build, visual check)
-6. **Use the folder structure strictly** — don't create files outside the defined structure
-7. **Suggest commit messages** following Conventional Commits
-8. **Flag scope creep** — if I ask for something that's in the "out of scope" list, remind me it's v2
+1. **Ask clarifying questions before generating code** if the task is ambiguous.
+2. **Follow every convention above without deviation** — if you think a convention should be broken, ASK first.
+3. **Generate complete, working code** — no placeholders like `// TODO: implement later` unless I explicitly ask.
+4. **Explain trade-offs** when you make non-obvious technical decisions.
+5. **Propose verification steps** at the end of each task (lint, typecheck, build, visual check).
+6. **Use the folder structure strictly** — don't create files outside the defined structure.
+7. **Suggest commit messages** following Conventional Commits.
+8. **Flag scope creep** — if I ask for something that's in the "out of scope" list, remind me it's v2.
 
 ## Out-of-Scope Requests
 
 If I ask for something that contradicts this document (new framework, login system, AI features, etc.), remind me gently and ask if I want to update the scope document before proceeding.
-
----
-
-**Ready. Tell me which night we're working on and what specific task you'd like help with.**

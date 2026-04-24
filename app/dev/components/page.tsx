@@ -11,6 +11,11 @@ import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
+export const metadata = {
+  title: 'Component preview',
+  robots: { index: false, follow: false },
+};
+
 export default function ComponentsPreviewPage() {
   return (
     <main className="container mx-auto max-w-4xl space-y-8 p-8">

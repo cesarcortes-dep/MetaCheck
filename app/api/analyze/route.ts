@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { parseHtml } from '@/features/analyze/lib/parser';
 import { fetchHtml } from '@/lib/fetch-html';
+import { checkRateLimit, extractClientIp } from '@/lib/rate-limit';
 import type {
   AnalyzeErrorCode,
   AnalyzeErrorResponse,
@@ -19,13 +20,40 @@ function errorResponse(
   code: AnalyzeErrorCode,
   message: string,
   status: number,
+  init?: { retryAfter?: number; headers?: Record<string, string> },
 ): NextResponse<AnalyzeErrorResponse> {
-  return NextResponse.json({ error: { code, message } }, { status });
+  const body: AnalyzeErrorResponse = {
+    error: {
+      code,
+      message,
+      ...(init?.retryAfter !== undefined ? { retryAfter: init.retryAfter } : {}),
+    },
+  };
+  return NextResponse.json(body, { status, headers: init?.headers });
 }
 
 export async function POST(
   request: Request,
 ): Promise<NextResponse<AnalyzeResponse | AnalyzeErrorResponse>> {
+  const clientIp = extractClientIp(request);
+  const rateLimit = await checkRateLimit(clientIp);
+  if (!rateLimit.allowed) {
+    return errorResponse(
+      'RATE_LIMITED',
+      `Too many requests. Try again in ${rateLimit.retryAfter}s.`,
+      429,
+      {
+        retryAfter: rateLimit.retryAfter,
+        headers: {
+          'Retry-After': String(rateLimit.retryAfter),
+          'X-RateLimit-Limit': String(rateLimit.limit),
+          'X-RateLimit-Remaining': '0',
+          'X-RateLimit-Reset': String(rateLimit.reset),
+        },
+      },
+    );
+  }
+
   let payload: unknown;
   try {
     payload = await request.json();
@@ -68,5 +96,13 @@ export async function POST(
     ...parsedDoc,
   };
 
-  return NextResponse.json(response);
+  return NextResponse.json(response, {
+    headers: Number.isFinite(rateLimit.limit)
+      ? {
+          'X-RateLimit-Limit': String(rateLimit.limit),
+          'X-RateLimit-Remaining': String(rateLimit.remaining),
+          'X-RateLimit-Reset': String(rateLimit.reset),
+        }
+      : undefined,
+  });
 }

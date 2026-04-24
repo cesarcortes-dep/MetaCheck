@@ -1,24 +1,29 @@
-import { ThemeToggle } from '@/components/shared/theme-toggle';
+import { SiteFooter } from '@/components/shared/site-footer';
+import { SiteHeader } from '@/components/shared/site-header';
 import { AnalyzeStatus } from '@/features/analyze/components/analyze-status';
-import { UrlInputForm } from '@/features/analyze/components/url-input-form';
+import { CtaBanner } from '@/features/landing/components/cta-banner';
+import { FeaturesSection } from '@/features/landing/components/features-section';
+import { Hero } from '@/features/landing/components/hero';
+import { HowItWorks } from '@/features/landing/components/how-it-works';
 
 export default function HomePage() {
   return (
-    <main className="container mx-auto max-w-3xl space-y-6 p-6 md:p-8">
-      <div className="flex items-center justify-end">
-        <ThemeToggle />
-      </div>
+    <div className="mx-auto flex min-h-screen max-w-5xl flex-col px-4 sm:px-6 lg:px-8">
+      <SiteHeader />
 
-      <header className="space-y-2 text-center">
-        <h1 className="text-4xl font-bold tracking-tight">MetaCheck</h1>
-        <p className="text-muted-foreground">
-          Paste any URL and see its meta tags through the eyes of Google, Facebook, Twitter, and
-          LinkedIn.
-        </p>
-      </header>
+      <main className="flex-1">
+        <Hero />
 
-      <UrlInputForm />
-      <AnalyzeStatus />
-    </main>
+        <div className="mx-auto max-w-3xl pt-2">
+          <AnalyzeStatus />
+        </div>
+
+        <FeaturesSection />
+        <HowItWorks />
+        <CtaBanner />
+      </main>
+
+      <SiteFooter />
+    </div>
   );
 }

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { AnalyzeProvider } from '@/context/analyze-context';
 import { ThemeProvider } from '@/context/theme-provider';
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from '@/lib/site-url';
 import './globals.css';
 
 const geistSans = Geist({
@@ -14,10 +15,56 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
+const DEFAULT_TITLE = `${SITE_NAME} — Preview your site on Google, Facebook, Twitter & LinkedIn`;
+
 export const metadata: Metadata = {
-  title: 'MetaCheck — Preview your site on Google, Facebook, Twitter & LinkedIn',
-  description:
-    'Analyze meta tags, Open Graph, Twitter Cards, and schema.org for any URL. Get a visual preview and technical report in seconds.',
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: DEFAULT_TITLE,
+    template: `%s · ${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  authors: [{ name: 'Cesar Cortes' }],
+  creator: 'Cesar Cortes',
+  keywords: [
+    'seo',
+    'meta tags',
+    'open graph',
+    'twitter cards',
+    'linkedin preview',
+    'google preview',
+    'social preview',
+    'schema.org',
+    'json-ld',
+    'metadata checker',
+  ],
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: '/',
+    siteName: SITE_NAME,
+    title: DEFAULT_TITLE,
+    description: SITE_DESCRIPTION,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: DEFAULT_TITLE,
+    description: SITE_DESCRIPTION,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  alternates: {
+    canonical: '/',
+  },
 };
 
 export default function RootLayout({
